@@ -3,7 +3,7 @@
 
 Yahho Finance Redis
 
-Get data from Yahoo Finance through yfinance lib and push to Redis
+Get data from Yahoo Finance through yfinance lib and push it to Redis
 
 
 ## Install
