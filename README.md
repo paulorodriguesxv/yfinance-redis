@@ -1,16 +1,16 @@
 
 # Yahho Finance Redis
 
-Yahho Finance Redis
+Yahoo Finance Redis
 
-Get data from Yahoo Finance through yfinance lib and push it to Redis
+Get data from Yahoo Finance through yfinance lib and push it to Redis.
 
-
-## Install
+# Install
 
 pip install -r requirements.txt
 
-# Environment Vars
+
+## Environment Vars
 
 Create a .env file with the following variables:
 
@@ -22,7 +22,7 @@ Create a .env file with the following variables:
 ## Running
 
 ```bash
-python app.py
+python ./server/app.py
 ```
 
 ## Result
