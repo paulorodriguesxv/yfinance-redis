@@ -74,5 +74,5 @@ except ConnectionRefusedError as e:
     logger.error(f"Connection could not been established: {str(e)}")
 except Exception as e:
     logger.error(f"Unknown error: {str(e)}")
-    logger.error(f"Service is shutting down... {str(e)}")
+    logger.error(f"Service is shutting down...")
     raise e
