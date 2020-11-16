@@ -14,27 +14,23 @@ REDIS_PASSWORD = config("REDIS_PASSWORD", default="Redis2019!")
 SYMBOLS_FILE = config("SYMBOLSERVER_SYMBOL_FILE", default=None)
 SYMBOL_KEY = "MT5_SYMBOLSERVER_SYMBOLS"
 
-def set_symbols_from_file(redis_conn):
-    symbols = {}
-    with open(SYMBOLS_FILE) as f:
-        for symbol in f.read().splitlines():
-            symbols[symbol] = 0.0
+def remove_stock_exchange_name(symbols):
+    return {key.split(".")[0]:symbols[key] for key in symbols }
 
-    redis_conn.hset(SYMBOL_KEY, mapping=symbols)
-
-    return symbols
-
+def set_prices_on_redis(redis_conn, prices):
+    redis_symbols = remove_stock_exchange_name(prices)
+    redis_conn.hset(SYMBOL_KEY, mapping=redis_symbols)
 
 def initialize_symbols(redis_conn):
 
     logger.info("Loading symbols from file...")
 
-    symbols = None
-    if set_symbols_from_file(redis_conn):
-        symbols = redis_conn.hgetall(SYMBOL_KEY)
+    symbols = {}
+    with open(SYMBOLS_FILE) as f:
+        for symbol in f.read().splitlines():
+            symbols[symbol] = 0.0
 
-    if not symbols:
-        raise ValueError(f"Symbols not found.")
+    set_prices_on_redis(redis_conn, symbols)
 
     return symbols
 
@@ -68,7 +64,8 @@ try:
     symbols = initialize_symbols(redis_conn)
     
     prices = get_prices_from_yahoo(symbols)
-    redis_conn.hset(SYMBOL_KEY, mapping=prices)
+
+    set_prices_on_redis(redis_conn, prices)    
 
 except ConnectionRefusedError as e:
     logger.error(f"Connection could not been established: {str(e)}")
