@@ -1,5 +1,5 @@
 
-# Yahho Finance Redis
+# Yahoo Finance Redis
 
 Yahoo Finance Redis
 
